@@ -41,8 +41,7 @@ class ElasticEngine extends Engine
      * ElasticEngine constructor.
      *
      * @param \ScoutElastic\Indexers\IndexerInterface $indexer
-     * @param bool $updateMapping
-     * @return void
+     * @param bool                                    $updateMapping
      */
     public function __construct(IndexerInterface $indexer, $updateMapping)
     {
@@ -92,7 +91,8 @@ class ElasticEngine extends Engine
      * Build the payload collection.
      *
      * @param \Laravel\Scout\Builder $builder
-     * @param array $options
+     * @param array                  $options
+     *
      * @return \Illuminate\Support\Collection
      */
     public function buildSearchQueryPayloadCollection(Builder $builder, array $options = [])
@@ -160,7 +160,8 @@ class ElasticEngine extends Engine
      * Perform the search.
      *
      * @param \Laravel\Scout\Builder $builder
-     * @param array $options
+     * @param array                  $options
+     *
      * @return array|mixed
      */
     protected function performSearch(Builder $builder, array $options = [])
@@ -212,9 +213,22 @@ class ElasticEngine extends Engine
     }
 
     /**
+     * api分页.
+     *
+     * @param string $query 防止
+     * @param int    $value
+     * @param int    $limit
+     */
+    public function apiPage(Builder $builder, $perPage, $page)
+    {
+        return $this->performSearch($builder->from(($page - 1) * $perPage)->take($perPage));
+    }
+
+    /**
      * Explain the search.
      *
      * @param \Laravel\Scout\Builder $builder
+     *
      * @return array|mixed
      */
     public function explain(Builder $builder)
@@ -228,6 +242,7 @@ class ElasticEngine extends Engine
      * Profile the search.
      *
      * @param \Laravel\Scout\Builder $builder
+     *
      * @return array|mixed
      */
     public function profile(Builder $builder)
@@ -241,6 +256,7 @@ class ElasticEngine extends Engine
      * Return the number of documents found.
      *
      * @param \Laravel\Scout\Builder $builder
+     *
      * @return int
      */
     public function count(Builder $builder)
@@ -266,7 +282,8 @@ class ElasticEngine extends Engine
      * Make a raw search.
      *
      * @param \Illuminate\Database\Eloquent\Model $model
-     * @param array $query
+     * @param array                               $query
+     *
      * @return mixed
      */
     public function searchRaw(Model $model, $query)
